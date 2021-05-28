@@ -1,3 +1,4 @@
+import { createElementCssSelector } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import {SharedService} from 'src/app/shared.service';
 
@@ -11,6 +12,10 @@ export class ShowDeptComponent implements OnInit {
   constructor(private service:SharedService) { }
 
   DepartmentList:any=[];
+
+  DepartmentIdFilter :string="";
+  DepartmentNameFilter :string="";
+  DepartmentListWithOutFilter :any=[];
 
   ModalTitle:string="";
   ActivateAddEditDeptComp:boolean=false;
@@ -53,7 +58,31 @@ export class ShowDeptComponent implements OnInit {
    this.service.getDeptList().subscribe(data => 
     { 
       this.DepartmentList = data; 
+      this.DepartmentListWithOutFilter =data;
     });
  }
+
+ filterFn(){
+   var DepartmentIdFilter =  this.DepartmentIdFilter;
+   var DepartmentNameFilter =  this.DepartmentNameFilter;
+
+   this.DepartmentList =  this.DepartmentListWithOutFilter.filter(function (el:any)
+   {
+      return el.DepartmentId.toString().toLowerCase().includes(DepartmentIdFilter.toString().toLowerCase())
+      && el.DepartmentName.toString().toLowerCase().includes(DepartmentNameFilter.toString().toLowerCase())
+   });
+
+ }
+
+//  sortResult(prop:any, asc:boolean){
+//     this.DepartmentList =  this,this.DepartmentListWithOutFilter.sort(function(a:any,b:any){
+//       if(asc){
+//         return (a[prop]> b[prop]) ? 1 : ((a[prop]> b[prop]) ?-1 :0);
+//       }
+//       else{
+//         return (b[prop]> a[prop]) ? 1 : ((b[prop]> a[prop]) ?-1 :0);
+//       }
+//     });
+//  }
 
 }
